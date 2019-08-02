@@ -447,4 +447,38 @@ router.post('/changeemail/:listId', (req, res) => {
     });
 });
 
+///NIKITA API
+
+router.post('/listadd', (req, res) => {
+    let input = {};
+
+    Object.keys(req.body)
+        .forEach(key => {
+            input[(key || '')
+                    .toString()
+                    .trim()
+                    .toUpperCase()] = (req.body[key] || '')
+                .toString()
+                .trim();
+        });
+    
+    lists.create(req.body, (err, id) => {
+        if (err || !id) {
+            log.error('API', err);
+            res.status(500);
+            return res.json({
+                error: err.message || err,
+                data: []
+            });
+        }
+        res.status(200);
+        res.json({
+            data: {
+                id
+            }
+        });
+    });
+});
+
+
 module.exports = router;
